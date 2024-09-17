@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @RestController
 public class VacationController {
@@ -27,7 +28,11 @@ public class VacationController {
         if (startDate == null && endDate == null && vacationDays == null) {
             return ResponseEntity.badRequest().body("Необходимо указать либо дни отпуска, либо как начальную, так и конечную дату.");
         }
-
+        if (startDate != null && endDate != null) {
+            if (LocalDate.parse(startDate).isAfter(LocalDate.parse(endDate))) {
+                return ResponseEntity.badRequest().body("Дата начала отпуска не может быть позже даты окончания.");
+            }
+        }
         if (((startDate != null && endDate == null) || (startDate == null && endDate != null)) && vacationDays == null) {
             return ResponseEntity.badRequest().body("Как начальная, так и конечная дата должны указываться вместе.");
         }
