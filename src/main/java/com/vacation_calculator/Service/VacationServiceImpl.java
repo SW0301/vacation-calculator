@@ -2,7 +2,6 @@ package com.vacation_calculator.Service;
 
 import com.vacation_calculator.Model.VacationRequest;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.html.HTMLOptGroupElement;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

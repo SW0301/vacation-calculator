@@ -5,6 +5,7 @@ import com.vacation_calculator.Service.VacationService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 
@@ -18,11 +19,19 @@ public class VacationController {
     }
 
     @GetMapping("/calculacte")
-    public BigDecimal calculateVacationPay(
+    public ResponseEntity<?> calculateVacationPay(
             @RequestParam BigDecimal averageSalary,
-            @RequestParam int vacationDays,
+            @RequestParam(required = false) Integer vacationDays,
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate) {
+        if (startDate == null && endDate == null && vacationDays == null) {
+            return ResponseEntity.badRequest().body("Необходимо указать либо дни отпуска, либо как начальную, так и конечную дату.");
+        }
+
+        if (((startDate != null && endDate == null) || (startDate == null && endDate != null)) && vacationDays == null) {
+            return ResponseEntity.badRequest().body("Как начальная, так и конечная дата должны указываться вместе.");
+        }
+
 
         VacationRequest request = new VacationRequest();
         request.setAverageSalary(averageSalary);
@@ -30,6 +39,6 @@ public class VacationController {
         request.setStartDate(startDate);
         request.setEndDate(endDate);
 
-        return vacationService.calculateVacationPay(request);
+        return ResponseEntity.ok(vacationService.calculateVacationPay(request));
     }
 }
