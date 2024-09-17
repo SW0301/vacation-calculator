@@ -19,7 +19,7 @@ public class VacationController {
         this.vacationService = vacationService;
     }
 
-    @GetMapping("/calculacte")
+    @GetMapping("/calculate")
     public ResponseEntity<?> calculateVacationPay(
             @RequestParam BigDecimal averageSalary,
             @RequestParam(required = false) Integer vacationDays,
